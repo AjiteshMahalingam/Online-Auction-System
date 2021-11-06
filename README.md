@@ -1,5 +1,5 @@
 # Online-Auction-System
-Online Campus Network Auction System - CS6110 - Object orienten analysis and Design Project
+Online Campus Network Auction System - CS6110 - Object oriented analysis and Design Project
 
 Built by
 -> 2019103014 Deekshith M
