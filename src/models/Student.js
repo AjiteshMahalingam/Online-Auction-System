@@ -44,4 +44,10 @@ const studentSchema = new Schema({
     required: true,
     trim: true,
   },
+}, {
+  timestamps: true
 });
+
+const Student = Mongoose.model('student', studentSchema);
+Student.createIndexes();
+export default Student;
