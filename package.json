@@ -18,6 +18,7 @@
   "homepage": "https://github.com/AjiteshMahalingam/Online-Auction-System#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",

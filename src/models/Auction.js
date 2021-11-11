@@ -1,5 +1,5 @@
-import { Mongoose } from "mongoose";
-import validator from "validator";
+const Mongoose = require('mongoose');
+const validator = require('validator');
 
 const Schema = Mongoose.Schema;
 const auctionSchema = new Schema(

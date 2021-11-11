@@ -1,4 +1,6 @@
-import { Mongoose } from "mongoose";
+const Mongoose = require('mongoose');
+const validator = require('validator');
+
 
 const Schema = Mongoose.Schema;
 const categorySchema = new Schema(

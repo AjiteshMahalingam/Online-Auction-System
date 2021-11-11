@@ -1,6 +1,5 @@
 const Mongoose = require('mongoose');
-import validator from "validator";
-
+const validator = require('validator');
 const Schema = Mongoose.Schema;
 const adminSchema = new Schema(
   {

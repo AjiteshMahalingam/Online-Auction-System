@@ -1,5 +1,7 @@
-import { Mongoose } from "mongoose";
-import validator from "validator";
+const Mongoose = require('mongoose');
+const validator = require('validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const Schema = Mongoose.Schema;
 const studentSchema = new Schema({
@@ -41,13 +43,39 @@ const studentSchema = new Schema({
   },
   college: {
     type: String,
+    enum: ['CEG', 'MIT', 'ACT', 'SAP'],
     required: true,
     trim: true,
   },
+  dept: {
+    type: String,
+    enum: ['CSE', 'IT', 'ECE', 'EEE', 'CIVIL', 'MECH'],
+    required: true
+  },
+  tokens: [{
+    token: {
+      type: String
+    }
+  }]
 }, {
   timestamps: true
 });
 
+studentSchema.methods.generateAuthToken = async function () {
+  const student = this;
+  const token = await jwt.sign({ _id: student._id.toString() }, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
+  return token;
+};
+
+studentSchema.pre('save', async function (next) {
+  const student = this;
+  if (student.isModified('password')) {
+    student.password = await bcrypt.hash(student.password, 8);
+  }
+  next();
+});
+
 const Student = Mongoose.model('student', studentSchema);
 Student.createIndexes();
-export default Student;
+
+module.exports = Student;
