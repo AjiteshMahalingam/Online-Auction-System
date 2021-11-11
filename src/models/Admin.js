@@ -33,4 +33,5 @@ const adminSchema = new Schema(
 
 const Admin = Mongoose.model('admin', adminSchema);
 Admin.createIndexes();
-export default Admin;
+
+module.exports = Admin;

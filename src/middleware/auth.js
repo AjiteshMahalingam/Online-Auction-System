@@ -1,21 +1,35 @@
-const jwt = require('express-jwt');
+const jwtExp = require('express-jwt');
+const jwt = require('jsonwebtoken');
+const Student = require('../models/Student');
+const Admin = require('../models/Admin');
 
 const auth = async (req, res, next) => {
-    jwt({
+    jwtExp({
         secret: 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e',
         algorithms: ['RS256'],
         getToken: req => req.cookies.token
     });
     try {
-        const decoded = jwt.verify(req.cookies.token, 'thisistorvus');
-        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token });
-        if (!user)
-            req.isAuth = false
-        else {
-            req.isAuth = true;
-            req.user = user;
-            req.token = token;
+        const decoded = jwt.verify(req.cookies.token, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
+        //console.log(decoded);
+        var user;
+        var isAuth = false;
+        if(decoded.type == "student"){
+            user = await Student.findOne({ _id: decoded._id });
+            user.tokens.map(token => {
+                if(token.token === req.cookies.token)
+                    isAuth = true;
+            });
         }
+        else if (decoded.type == "admin"){
+            user = await Admin.findOne({ _id: decoded._id });
+            user.tokens.map(token => {
+                if(token.token === req.cookies.token)
+                    isAuth = true;
+            });
+        }
+        req.isAuth = isAuth;
+        req.decoded = decoded;
         next();
 
     } catch (e) {

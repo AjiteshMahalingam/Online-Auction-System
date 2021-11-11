@@ -63,8 +63,18 @@ const studentSchema = new Schema({
 
 studentSchema.methods.generateAuthToken = async function () {
   const student = this;
-  const token = await jwt.sign({ _id: student._id.toString() }, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
+  const token = await jwt.sign({ _id: student._id.toString(), type : "student"}, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
   return token;
+};
+
+studentSchema.statics.findByCredentials = async (email, password) => {
+  const student = await Student.findOne({ email });
+  if(!student)
+      throw new Error('Unable to connect');
+  const isMatch = await bcrypt.compare(password, student.password);
+  if(!isMatch)
+      throw new Error('Unable to connect');
+  return student;
 };
 
 studentSchema.pre('save', async function (next) {
