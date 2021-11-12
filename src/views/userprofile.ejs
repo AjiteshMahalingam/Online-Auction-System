@@ -1,0 +1,72 @@
+<html>
+    <head>
+        <title>Auction Port</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="/userprofile.css">
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+    <style>
+        body {
+          background-image: url('/bg.jpg');
+          background-repeat: no-repeat;
+          background-attachment: fixed;  
+          background-size: cover;
+        }
+        /* img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+} */
+        </style>
+    <body style="font-family: Arial, Helvetica, sans-serif;">
+        <div ><a href="/"><img src="/logo1.png" id="logo" style="height: 100px !important; margin-top: 10px !important ;"  ></a></div>
+        <nav class="navbar navbar-toggleable-md navbar-expand-lg navbar-default navbar-light mb-10" style="background-color: rgba(255, 255, 255, 0.8);">
+            <div class="container">
+                <button class="navbar-toggler text-dark" data-toggle="collapse" data-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div  class="collapse navbar-collapse" id="mainNav">
+                         <div class="navbar-nav  " style="margin: 0 auto; font-size: large;">
+                        <a class="nav-item nav-link text-dark mr-5" href="/student/home">Back</a>
+                        <form action="/student/logout" method="post">
+                            <button type="submit" class="nav-item nav-link text-dark align-self-center">Logout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="background"></div>    
+        <div class="container text-center" style="width : 50%; background-color: rgba(255, 255, 255, 0.7); margin-top: 10px; border-radius:15px; padding: 5px;">
+            <h3 >Account Details</h3>
+            <img src="userlogo.png" style="margin:0 auto; height: 140px; width: 140px; margin-bottom: 15px;">
+            <table class="text-left table table-bordered table-striped" >
+                <tr><td style="font-weight:bold;">Name</td><td><%= student.name %></td></tr>
+                <tr><td style="font-weight:bold;">Register No</td><td><%= student.regNo %></td></tr>
+                <tr><td style="font-weight:bold;">Gender</td><td><%= student.gender %></td></tr>
+                <tr><td style="font-weight:bold;">College</td><td><%= student.college %></td></tr>
+                <tr><td style="font-weight:bold;">Department</td><td><%= student.dept %></td></tr>
+                <tr><td style="font-weight:bold;">Email</td><td><%= student.email %></td></tr>
+                <tr><td style="font-weight:bold;">Mobile</td><td><%= student.contactNo %></td></tr>
+             </table>
+        </div>
+        </div>
+        <div class="container-fluid text-center mt-2 p-4"
+        style="background-color: rgba(255, 255, 255, 0.4);position: relative; ">
+        <div class="i-bar"
+            style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content:center; margin-bottom: 2em;">
+            <a class="fa fa-facebook " href="#"
+                style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+            <a class="fa fa-linkedin" href="#"
+                style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+            <a class="fa fa-envelope " href="#"
+                style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+        </div>
+        <p class="credit" style="font-size: 20px; font-stretch: 3px; text-align: center; color: black;">
+            © AUCTION PORT
+        </p>
+    </div>
+    </body>
+</html>

@@ -18,7 +18,11 @@
                 <div style="text-align: center;"><a class="navbar-brand" href="#">
                     <img src="/images/avatar.png" alt="Avatar Logo" style="width:40px;margin: 2px;" class="rounded-pill">
                 </a></div>
-                    <div style="margin-right:15px ;"><a href="#" style="color: red;">Sign out</a></div>
+                    <div style="margin-right:15px ;">
+                      <form action="/admin/logout" method="post">
+                        <button type="submit" class="btn btn-info align-self-center">Logout</button>
+                    </form>
+                    </div>
                 </div>
             </div>
         </nav>

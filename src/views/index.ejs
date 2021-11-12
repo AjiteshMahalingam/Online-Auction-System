@@ -36,9 +36,21 @@
                     <li class="nav-item">
                         <a href="/browse" class="nav-link text-white">Browse</a>
                     </li>
+                    <% if(isAuth) { %>
+                        <% if(type === 'student') { %>
+                        <li class="nav-item">
+                            <a href="/student/home" class="nav-link text-white">Dashboard</a>
+                        </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a href="/admin/home" class="nav-link text-white">Dashboard</a>
+                            </li>
+                        <% } %>
+                    <% } else { %>
                     <li class="nav-item">
                         <a href="/login" class="nav-link text-white">Login</a>
                     </li>
+                    <% } %>
                     <li class="nav-item">
                         <a href="#contact-us" class="nav-link text-white">Contact Us</a>
                     </li>
@@ -113,10 +125,10 @@
             <h4 class="display-5 mb-3">Contact Us</h4>
             <form action="/contact" class="form" id="contactForm" method="post">
                 <div class="form-group">
-                    <input class="form-control" type="text"  placeholder="Enter StudentID">
+                    <input class="form-control" type="text"  name="userId" placeholder="Enter StudentID">
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" type="text"
+                    <textarea class="form-control" type="text" name="feedbackDesc"
                         placeholder="Enter your query/feedback."></textarea>
                 </div>
                 <button type="submit" class="btn btn-info">Submit</button>

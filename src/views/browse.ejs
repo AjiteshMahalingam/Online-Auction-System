@@ -31,10 +31,16 @@
                 </ul>
             </div>
             <div class="navbar-text mr-auto" style="position: absolute; right: 15px;display: block;justify-content: center;">
-                <a class="navbar-brand" href="#" style="display: block;">
+              <% if(isAuth) { %>              
+              <a class="navbar-brand" href="/student/profile" style="display: block;">
                     <img class="rounded-pill" src="/avatar.png" alt="..." style="width: 60px;">
                 </a>
-                <a href="#" style="color: red;">Sign out</a>
+                <form action="/student/logout" method="post">
+                  <button type="submit" class="btn btn-info align-self-center">Logout</button>
+              </form>
+              <% } else { %>
+                <a href="/login" class="btn btn-info">Login</a>
+              <% } %>
             </div>
         </div>
     </nav>

@@ -11,7 +11,6 @@ const auth = async (req, res, next) => {
     });
     try {
         const decoded = jwt.verify(req.cookies.token, 'ac780bcd612258fe876474db066bd186dd3d70a32cc173db964e');
-        //console.log(decoded);
         var user;
         var isAuth = false;
         if(decoded.type == "student"){
@@ -30,10 +29,11 @@ const auth = async (req, res, next) => {
         }
         req.isAuth = isAuth;
         req.decoded = decoded;
-        next();
+        return next();
 
     } catch (e) {
-        next();
+        console.log(e);
+        return next();
     }
     next();
 };

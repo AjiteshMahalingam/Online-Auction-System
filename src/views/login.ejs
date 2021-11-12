@@ -8,6 +8,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<style>
+  body {
+    background-image: url('bg.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;
+  }
+ </style>
 
 <body>
   <div class="container">
@@ -52,15 +60,15 @@
         </div>
         <div class="login-form">
           <div class="title">Admin Login</div>
-          <form action="#">
+          <form action="/admin/login" method="post">
             <div class="input-boxes">
               <div class="input-box">
                 <i class="fas fa-envelope"></i>
-                <input type="text" placeholder="Enter your email" required>
+                <input type="text" name="email" placeholder="Enter your email" required>
               </div>
               <div class="input-box">
                 <i class="fas fa-lock"></i>
-                <input type="password" placeholder="Enter your password" required>
+                <input type="password" name="password" placeholder="Enter your password" required>
               </div>
               <div class="button input-box">
                 <input type="submit" value="Submit">
