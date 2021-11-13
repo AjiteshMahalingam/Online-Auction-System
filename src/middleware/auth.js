@@ -35,7 +35,6 @@ const auth = async (req, res, next) => {
         console.log(e);
         return next();
     }
-    next();
 };
 
 module.exports = auth;

@@ -1,13 +1,8 @@
 const Mongoose = require('mongoose');
-const validator = require('validator');
+
+
 const Schema = Mongoose.Schema;
 const productSchema = new Schema({
-  productId: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-  },
   productName: {
     type: String,
     required: true,
@@ -23,6 +18,11 @@ const productSchema = new Schema({
     required: true,
     ref: "student",
   },
+  productDesc : {
+    type: String,
+    required: true,
+    trim: true,
+  },
   productImg: {
     type: Buffer,
     required: true,
@@ -32,5 +32,5 @@ const productSchema = new Schema({
 });
 
 const Product = Mongoose.model('product',productSchema);
-Product.createIndexes();
-export default Product;
+
+module.exports =  Product;

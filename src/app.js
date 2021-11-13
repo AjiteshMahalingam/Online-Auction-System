@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get("/", auth, (req, res) => {
-  res.render('index', { isAuth: req.isAuth, type : req.decoded.type});
+  res.render('index', { isAuth: req.isAuth, type: req.decoded.type });
 });
 
 app.get("/browse", auth, (req, res) => {
@@ -31,17 +31,19 @@ app.get("/browse", auth, (req, res) => {
     res.render('browse', { isAuth: req.isAuth });
   else
     res.redirect('/admin/home');
+
 });
 
 app.get("/register", (req, res) => {
   res.render('register');
 });
 
-app.get("/login", auth,  (req, res) => {
-  if(!req.isAuth)
+app.get("/login", auth, (req, res) => {
+  if (!req.isAuth)
     res.render('login');
   else
-    res.send({"Message" : "Already logged-in"});
+    res.send({ "Message": "Already logged-in" });
+
 });
 
 app.post("/contact", async (req, res) => {
@@ -54,6 +56,15 @@ app.post("/contact", async (req, res) => {
   }
 });
 
+// app.get('/seller', async (req, res) => {
+//   try {
+//     const allFeedbacks = await Feedback.find();
+//     const student = await Student.findById();
+//     res.render('seller', { feedbacks : allFeedbacks});
+//   } catch (e) {
+//     console.log(e);
+//   }
+// });
 app.use(studentRouter);
 app.use(adminRouter);
 

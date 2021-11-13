@@ -1,7 +1,4 @@
 const Mongoose = require('mongoose');
-const validator = require('validator');
-
-
 const Schema = Mongoose.Schema;
 const categorySchema = new Schema(
   {
@@ -24,4 +21,4 @@ const categorySchema = new Schema(
 
 const Category = Mongoose.model('category', categorySchema);
 Category.createIndexes();
-export default Category;
+module.exports = Category;

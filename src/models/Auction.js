@@ -19,6 +19,10 @@ const auctionSchema = new Schema(
       required: true,
       default: 0,
     },
+    isAccepted : {
+      type: Boolean,
+      default : false
+    },
     currentHighestBid: {
       type: Number,
       required: true,

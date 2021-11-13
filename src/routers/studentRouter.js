@@ -1,6 +1,7 @@
 const express = require('express');
 const auth = require('../middleware/auth');
 const Student = require('../models/Student');
+const Category = require('../models/Category');
 
 const router = new express.Router();
 
@@ -21,7 +22,7 @@ router.post("/student/login", async (req, res) => {
         student.tokens.push({ token });
         await student.save();
 
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { httpOnly: true, maxAge: 2629800000 });
         res.redirect('/student/home');
     } catch (e) {
         console.log(e);
@@ -54,7 +55,7 @@ router.post("/student/register", async (req, res) => {
         student.tokens.push({ token });
         await student.save();
 
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token, { httpOnly: true, maxAge: 2629800000 });
         res.redirect('/student/home');
     } catch (e) {
         console.log(e)
@@ -79,4 +80,20 @@ router.get("/student/profile", auth, async (req, res) => {
     }
 });
 
+router.get("/student/seller/home", auth, async (req, res) => {
+    try {
+        if (req.isAuth) {
+            if (req.decoded.type === 'student') {
+                const categories = await Category.find();
+                res.render('seller', {categories});
+            } else {
+                res.send({ "Status": "404" });
+            }
+        }
+        else
+            res.redirect("/login");
+    } catch (e) {
+        console.log(e);
+    }
+});
 module.exports = router;
