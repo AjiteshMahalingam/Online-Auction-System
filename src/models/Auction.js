@@ -23,6 +23,10 @@ const auctionSchema = new Schema(
       type: Boolean,
       default : false
     },
+    isCompleted : {
+      type: Boolean,
+      default : false
+    },
     currentHighestBid: {
       type: Number,
       required: true,
@@ -52,5 +56,5 @@ const auctionSchema = new Schema(
 );
 
 const Auction = Mongoose.model('auction',auctionSchema);
-export default Auction;
+module.exports =  Auction;
 

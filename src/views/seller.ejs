@@ -38,8 +38,9 @@
     <div class="container mt-4">
         <nav>
             <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users"
-                    type="button" role="tab" aria-controls="nav-users" aria-selected="true">Users</button>
+                <button class="nav-link active" id="nav-create-auction-tab" data-bs-toggle="tab"
+                    data-bs-target="#nav-create-auction" type="button" role="tab" aria-controls="nav-create-auction"
+                    aria-selected="true">Create Auction</button>
                 <button class="nav-link" id="nav-queue-tab" data-bs-toggle="tab" data-bs-target="#nav-queue"
                     type="button" role="tab" aria-controls="nav-queue" aria-selected="false">Auction Queue</button>
                 <button class="nav-link" id="nav-complete-tab" data-bs-toggle="tab" data-bs-target="#nav-complete"
@@ -50,9 +51,11 @@
             </div>
         </nav>
         <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
-                <div class="container">
-                    <form action="" method="post">
+            <div class="tab-pane fade show active" id="nav-create-auction" role="tabpanel"
+                aria-labelledby="nav-create-auction-tab">
+                <div class="container p-2">
+                    <form action="/student/seller/create-auction" method="post" enctype="multipart/form-data"
+                        id="auctionForm" autocomplete="off">
                         <div class="form-group">
                             <label>Product Name</label>
                             <input type="text" class="form-control" name="productName">
@@ -61,10 +64,11 @@
                             <label>Category</label>
                             <select class="form-control" name="categoryId">
                                 <option disabled>Choose category</option>
-                                <% categories.forEach(category => { %>
-                                    <option value= <%= category.categoryId %> ><%= category.categoryName %></option>
-                                <% }) %>
-                            </select>                            
+                                <% categories.forEach(category=> { %>
+                                    <option value=<%=category.categoryId %> ><%= category.categoryName %>
+                                    </option>
+                                    <% }) %>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Product Description</label>
@@ -82,59 +86,52 @@
                     </form>
                 </div>
             </div>
-        </div>
-        <div class="tab-pane fade" id="nav-queue" role="tabpanel" aria-labelledby="nav-queue-tab">
-            <div class="card mb-3" style="padding: 10px;margin: 5px;">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="/images/bucket.jpg" class="img-fluid" alt="bucket">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Bucket</h5>
-                            <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                            <p class="card-text">Category: Utensils</p>
-                            <p class="card-text">Description: 5 years old. In good condition</p>
-                            <p class="card-text">Price: 30 Rs</p>
-                            <a class="btn btn-success" href="#">Accept</a>
-                            <a class="btn btn-danger" href='#'>Reject</a>
+            <div class="tab-pane fade" id="nav-queue" role="tabpanel" aria-labelledby="nav-queue-tab">
+                <% if(auctions.length>0) { %>
+                    <% auctions.forEach(auction=> { %>
+                        <% if(!auctions.isCompleted) { %>
+                        <div class="card mb-3" style="padding: 10px;margin: 5px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="/images/bucket.jpg" class="img-fluid" alt="bucket">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Product name: <%= %></h5>
+                                        <p class="card-text">Category: <%= %></p>
+                                        <p class="card-text">Description: <%= %></p>
+                                        <p class="card-text">Price: <%= auctions.openingBid%></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                <% } else { %>
+                    <p>No auctions in progress! Come back later</p>
+                    <% }) %>
+                <% } %>
             </div>
-            <div class="card mb-3" style="padding: 2px;margin: 5px;">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="/images/earphone.jpg" class="img-fluid" alt="bucket">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Bucket</h5>
-                            <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                            <p class="card-text">Description: 5 years old. In good condition</p>
-                            <p class="card-text">Price: 30 Rs</p>
-                            <a class="btn btn-success" href="#">Accept</a>
-                            <a class="btn btn-danger" href='#'>Reject</a>
+            <div class="tab-pane fade" id="nav-complete" role="tabpanel" aria-labelledby="nav-complete-tab">
+                <% if(auctions.length>0) { %>
+                    <% auctions.forEach(auction=> { %>
+                        <% if(!auctions.isCompleted) { %>
+                        <div class="card mb-3" style="padding: 2px;margin: 5px;">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="/images/earphone.jpg" class="img-fluid" alt="bucket">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Auction ID: <%= %></h5>
+                                        <p class="card-text">Winner: <%= %></p>
+                                        <p class="card-text">Final price: <%= auctions.currentHighestBid%> Rs</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="nav-complete" role="tabpanel" aria-labelledby="nav-complete-tab">
-            <div class="card mb-3" style="padding: 2px;margin: 5px;">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img src="/images/earphone.jpg" class="img-fluid" alt="bucket">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Auction ID:</h5>
-                            <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                            <p class="card-text">Winner:</p>
-                            <p class="card-text">Final price: 30 Rs</p>
-                        </div>
-                    </div>
-                </div>
+                        <% } else { %>
+                            <p>No auctions in progress! Come back later</p>
+                            <% }) %>
+                        <% } %>
             </div>
         </div>
         <div class="tab-pane fade" id="nav-feed" role="tabpanel" aria-labelledby="nav-feed-tab">
@@ -167,6 +164,26 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        const form = document.querySelector('#auctionForm');
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            //console.log("Form submitted");            
+            swal({
+                title: "Good job!",
+                text: "You clicked the button!",
+                icon: "success",
+            }).then(val => {
+                if (val) {
+                    form.submit();
+                    form.reset();
+                }
+            })
+        });
+    </script>
 </body>
 
 </html>

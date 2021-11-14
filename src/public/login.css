@@ -60,7 +60,7 @@ body{
   z-index: 12;
 }
 .container .cover::after{
-  opacity: 0.3;
+  /* opacity: 0.3; */
   transform: rotateY(180deg);
   backface-visibility: hidden;
 }
