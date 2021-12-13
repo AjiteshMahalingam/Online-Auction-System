@@ -33,6 +33,7 @@ const auth = async (req, res, next) => {
 
     } catch (e) {
         console.log(e);
+        //console.log("test");
         return next();
     }
 };

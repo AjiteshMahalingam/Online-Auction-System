@@ -3,15 +3,21 @@ const auth = require('../middleware/auth');
 const Admin = require('../models/Admin');
 const Feedback = require("../models/Feedback");
 const Student = require("../models/Student");
+const Category = require("../models/Category");
+const Auction = require("../models/Auction");
+const Product = require("../models/Product");
 
 const router = new express.Router();
 
 router.get("/admin/home", auth, async (req, res) => {
   if (req.isAuth) {
     if (req.decoded.type === 'admin') {
-      const allFeedbacks = await Feedback.find();
+      const feedbacks = await Feedback.find();
       const students = await Student.find();
-      res.render('admin', { students , feedbacks: allFeedbacks });
+      const categories = await Category.find();
+      const auctions = await Auction.find();
+      const products = await Product.find();
+      res.render('admin', { students, feedbacks,  categories, auctions, products});
     }
     else
       res.send({ "Status": "404" });
@@ -29,7 +35,7 @@ router.post("/admin/login", async (req, res) => {
     admin.tokens.push({ token });
     await admin.save();
 
-    res.cookie('token', token, { httpOnly: true, maxAge: 2629800000});
+    res.cookie('token', token, { httpOnly: true, maxAge: 2629800000 });
     res.redirect('/admin/home');
   } catch (e) {
     console.log(e);
@@ -52,5 +58,25 @@ router.post("/admin/logout", auth, async (req, res) => {
   }
 });
 
+router.post('/admin/acceptAuction/:id', async(req, res) => {
+  try {
+    const auction = await Auction.findById(req.params.id);
+    auction.isAccepted = true;
+    await auction.save();
+    console.log(auction);
+    res.redirect("/admin/home");
+  } catch(e) {
+    console.log(e);
+  }
+});
+
+router.post('/admin/rejectAuction/:id', async(req, res) => {
+  try {
+    await Auction.findByIdAndRemove(req.params.id);
+    res.redirect("/admin/home");
+  } catch(e) {
+    console.log(e);
+  }
+});
 
 module.exports = router;

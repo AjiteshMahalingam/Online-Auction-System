@@ -2,11 +2,13 @@
 
 <head>
   <title>Admin Panel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 </head>
 
 <body style="background-image: url(../public/bg.jpg);">
@@ -28,7 +30,7 @@
         </a>
         <form action="/admin/logout" method="post">
           <button type="submit" class="btn btn-info align-self-center mr-2">Logout</button>
-        </form>        
+        </form>
       </div>
     </div>
   </div>
@@ -75,63 +77,89 @@
               </div>
             </div>
             <% }) %>
-            <% } else { %>
+              <% } else { %>
 
-            <% } %>
+                <% } %>
       </div>
       <div class="tab-pane fade" id="nav-queue" role="tabpanel" aria-labelledby="nav-queue-tab">
-        <div class="card mb-3" style="padding: 10px;margin: 5px;">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="/images/bucket.jpg" class="img-fluid" alt="bucket">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Bucket</h5>
-                <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                <p class="card-text">Category: Utensils</p>
-                <p class="card-text">Description: 5 years old. In good condition</p>
-                <p class="card-text">Price: 30 Rs</p>
-                <a class="btn btn-success" href="#">Accept</a>
-                <a class="btn btn-danger" href='#'>Reject</a>
+        <% if(auctions.length > 0) { %>
+          <% auctions.forEach((auction) => { %> 
+              <% if(auction.isCompleted === false) { %>
+              <div class="card mb-3" style="padding: 10px;margin: 5px;">
+                  <div class="row no-gutters">
+                      <% products.forEach(product =>{ %>
+                      <% if(String(product._id) == String(auction.productId)){ %>
+                      <div class="col-md-4">
+                          <img src="data:image/png;base64,<%= product.productImg.toString('base64') %>" class="img-fluid" alt="productImg">
+                      </div>
+                      <div class="col-md-8">
+                          <div class="card-body">
+                              <h5 class="card-title">Auction id : <%= auction._id %> </h5>
+                              <p class="card-tetx">Product name: <%= product.productName %> </p>
+                              <p class="card-text">Description: <%= product.productDesc %></p>
+                              <% students.forEach(student =>{ %>
+                                <% if(String(student._id) == String(auction.sellerId)){ %>
+                            <p class="card-text">Seller : <%= student.name %></p>
+                            <% }}) %>
+                              <% categories.forEach(category =>{ %>
+                                  <% if(String(category._id) == String(product.categoryId)){ %>
+                              <p class="card-text">Category: <%= category.categoryName %></p>
+                              <% }}) %>
+                              <% }}) %>
+                              <p class="card-text">Opening Bid: <%= auction.openingBid %> </p>
+                              <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
+                              <div class="d-flex flex-row">
+                                <div class="mr-2">
+                                  <form action="/admin/acceptAuction/<%= String(auction._id) %>" method="post">
+                                    <button class="btn btn-info" type="submit" >Accept</button>
+                                  </form>
+                                </div>
+                                <div>
+                                  <form action="/admin/rejectAuction/<%= String(auction._id) %>" method="post">
+                                    <button class="btn btn-danger" type="submit">Reject</button>
+                                  </form>
+                                </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
-          </div>
-        </div>
-        <div class="card mb-3" style="padding: 2px;margin: 5px;">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="/images/earphone.jpg" class="img-fluid" alt="bucket">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Bucket</h5>
-                <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                <p class="card-text">Description: 5 years old. In good condition</p>
-                <p class="card-text">Price: 30 Rs</p>
-                <a class="btn btn-success" href="#">Accept</a>
-                <a class="btn btn-danger" href='#'>Reject</a>
-              </div>
-            </div>
-          </div>
-        </div>
+          <% }}) } %>
       </div>
       <div class="tab-pane fade" id="nav-complete" role="tabpanel" aria-labelledby="nav-complete-tab">
-        <div class="card mb-3" style="padding: 2px;margin: 5px;">
-          <div class="row no-gutters">
-            <div class="col-md-4">
-              <img src="/images/earphone.jpg" class="img-fluid" alt="bucket">
-            </div>
-            <div class="col-md-8">
-              <div class="card-body">
-                <h5 class="card-title">Auction ID:</h5>
-                <p class="card-text">Seller: name1(name1@gmail.com)</p>
-                <p class="card-text">Winner:</p>
-                <p class="card-text">Final price: 30 Rs</p>
+        <% if(auctions.length > 0) { %>
+          <% auctions.forEach((auction) => { %> 
+              <% if(auction.isCompleted === true) { %>
+              <div class="card mb-3" style="padding: 10px;margin: 5px;">
+                  <div class="row no-gutters">
+                      <% products.forEach(product =>{ %>
+                      <% if(String(product._id) == String(auction.productId)){ %>
+                      <div class="col-md-4">
+                          <img src="data:image/png;base64,<%= product.productImg.toString('base64') %>" class="img-fluid" alt="productImg">
+                      </div>
+                      <div class="col-md-8">
+                          <div class="card-body">
+                              <h5 class="card-title">Auction id : <%= auction._id %> </h5>
+                              <p class="card-tetx">Product name: <%= product.productName %> </p>
+                              <p class="card-text">Description: <%= product.productDesc %></p>
+                              <% students.forEach(student =>{ %>
+                                <% if(String(student._id) == String(auction.sellerId)){ %>
+                                <p class="card-text">Seller : <%= student.name %></p>
+                            <% } if(String(student._id) == String(auction.currentHighestBidder)){ %> 
+                              <p class="card-text">Winner : <%= student.name %></p>
+                              <%}}) %>
+                              <% categories.forEach(category =>{ %>
+                                  <% if(String(category._id) == String(product.categoryId)){ %>
+                              <p class="card-text">Category: <%= category.categoryName %></p>
+                              <% }}) %>
+                              <% }}) %>
+                              <p class="card-text">Closing Bid: <%= auction.currentHighestBid %> </p>
+                              <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
-          </div>
-        </div>
+          <% }}) } %>
       </div>
       <div class="tab-pane fade" id="nav-feed" role="tabpanel" aria-labelledby="nav-feed-tab">
         <% if (feedbacks.length> 0) { %>
@@ -163,29 +191,32 @@
   </div>
   <!-- Footer -->
   <div class="container-fluid text-center mt-5 p-4"
-  style="background-color: rgba(109, 233, 233, 0.726);position: relative; ">
-  <div class="i-bar"
+    style="background-color: rgba(109, 233, 233, 0.726);position: relative; ">
+    <div class="i-bar"
       style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content:center; margin-bottom: 2em;">
       <a class="fa fa-facebook " href="#"
-          style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+        style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
       <a class="fa fa-linkedin" href="#"
-          style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+        style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
       <a class="fa fa-envelope " href="#"
-          style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
-  </div>
-  <p class="credit" style="font-size: 20px; font-stretch: 3px; text-align: center; color: black;">
+        style="border: none; text-decoration: none;  margin: 0em 1em; color:black; font-size: xx-large;"></a>
+    </div>
+    <p class="credit" style="font-size: 20px; font-stretch: 3px; text-align: center; color: black;">
       © ONLINE AUCTION SYSTEM
-  </p>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-  crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-  crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-  integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-  crossorigin="anonymous"></script>
+    </p>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>

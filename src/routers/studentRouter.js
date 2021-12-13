@@ -9,6 +9,7 @@ const Category = require('../models/Category');
 const Product = require('../models/Product');
 const Auction = require('../models/Auction');
 
+
 const router = new express.Router();
 
 router.get("/student/home", auth, (req, res) => {
@@ -86,26 +87,74 @@ router.get("/student/profile", auth, async (req, res) => {
     }
 });
 
-router.get("/student/seller/home", auth, async (req, res) => {
+router.get("/student/seller/home", auth ,async (req, res) => {
     try {
         if (req.isAuth) {
             if (req.decoded.type === 'student') {
                 const categories = await Category.find();
-                const auctions = await Auction.find({ sellerId: Mongoose.Types.ObjectId(req.decoded._id) });
-                const auctionsCompleted = auctions.filter(auction => auction.isCompleted).map(auction => {
-                    const product = Product.findById(auction.productId);
-                    const seller = Student.findById(auction.sellerId);
-                    const winner = Student.findById(auction.currentHighestBidder);
-                    return { ...auction, productId: product, sellerId: seller, currentHighestBidder: winner };
+                const auctions = await Auction.find({sellerId : req.decoded._id});
+                const products = await Product.find({sellerId : req.decoded._id});
+                res.render('seller', { categories, auctions, products });
+            } else {
+                res.send({ "Status": "404" });
+            }
+        }
+        else
+            res.redirect("/login");
+    } catch (e) {
+        console.log(e);
+    }
+});
 
-                });
-                const auctionsPending = auctions.filter(auction => !auction.isCompleted).map(auction => {
-                    const product = Product.findById(auction.productId);
-                    const seller = Student.findById(auction.sellerId);
-                    return { ...auction, productId: product, sellerId: ReadableStreamDefaultController};
+router.get("/browse", auth ,async (req, res) => {
+    try {
+        if (req.isAuth) {
+            if (req.decoded.type === 'student') {
+                const categories = await Category.find();
+                const auctions = await Auction.find();
+                const students = await Student.find();
+                const products = await Product.find();
+                res.render('browse', { categories, auctions, products, students, isAuth : req.isAuth });
+            } else {
+                res.send({ "Status": "404" });
+            }
+        }
+        else
+            res.redirect("/login");
+    } catch (e) {
+        console.log(e);
+    }
+});
 
+router.get("/browse/:category", auth ,async (req, res) => {
+    try {
+        if (req.isAuth) {
+            if (req.decoded.type === 'student') {
+                const categories = await Category.find();
+                var filterCategory;
+                categories.forEach(category => {
+                    if(category.categoryName == req.params.category)
+                        filterCategory = category._id;
                 });
-                res.render('seller', { categories, auctionsCompleted, auctionsPending});
+                const products = await Product.find({categoryId : filterCategory});
+
+                const auctions = await Auction.find();
+                var filterAuctions = [];
+                auctions.forEach(auction => {
+                    products.forEach(product => {
+                        if(auction.productId.toString() == product._id.toString())
+                            filterAuctions.push(auction);
+                    });
+                });
+                const students = await Student.find();
+                var filterStudents = [];
+                filterAuctions.forEach(auction => {
+                    students.forEach(student => {
+                        if(auction.sellerId.toString() == student._id.toString())
+                            filterStudents.push(student);
+                    });
+                });
+                res.render('browse', { categories, auctions : filterAuctions, products, students : filterStudents, isAuth : req.isAuth });
             } else {
                 res.send({ "Status": "404" });
             }
@@ -147,6 +196,7 @@ router.post("/student/seller/create-auction", auth, upload.single('productImg'),
             productId: product._id,
             sellerId: Mongoose.Types.ObjectId(req.decoded._id),
             openingBid: req.body.openingBid,
+            auctionDate: req.body.auctionDate
         });
         await auction.save();
         //console.log(auction);

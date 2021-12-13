@@ -26,14 +26,6 @@ app.get("/", auth, (req, res) => {
   res.render('index', { isAuth: req.isAuth, type: req.decoded.type });
 });
 
-app.get("/browse", auth, (req, res) => {
-  if (req.decoded.type === 'student')
-    res.render('browse', { isAuth: req.isAuth });
-  else
-    res.redirect('/admin/home');
-
-});
-
 app.get("/register", (req, res) => {
   res.render('register');
 });

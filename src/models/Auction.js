@@ -19,6 +19,10 @@ const auctionSchema = new Schema(
       required: true,
       default: 0,
     },
+    auctionDate : {
+      type: Date,
+      required: true
+    },
     isAccepted : {
       type: Boolean,
       default : false
