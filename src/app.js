@@ -1,15 +1,24 @@
 const express = require('express');
 const path = require('path');
+const http = require('http');
 const cookieParser = require('cookie-parser');
+const socketio = require('socket.io');
 
 require("./utils/connectDB");
 
 const Feedback = require("./models/Feedback");
+const Student = require('./models/Student');
+const Category = require('./models/Category');
+const Product = require('./models/Product');
+const Auction = require('./models/Auction');
 const auth = require("./middleware/auth");
 const studentRouter = require("./routers/studentRouter");
 const adminRouter = require('./routers/adminRouter');
 
 const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
+
 const port = 3000;
 
 app.set('view engine', 'ejs');
@@ -48,19 +57,27 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-// app.get('/seller', async (req, res) => {
-//   try {
-//     const allFeedbacks = await Feedback.find();
-//     const student = await Student.findById();
-//     res.render('seller', { feedbacks : allFeedbacks});
-//   } catch (e) {
-//     console.log(e);
-//   }
-// });
+app.get("/auction/:id", auth, async (req, res) => {
+  try {
+    const auction = await Auction.findById(req.params.id);
+    //console.log(auction);
+    const product = await Product.findById(auction.productId);
+    //console.log(product);
+    const seller = await Student.findById(auction.sellerId);
+    //console.log(seller);
+    res.render('auction', {auctionId : req.params.id, title: product.productName, sellerName : seller.name, openingBid: auction.openingBid, image : product.productImg});
+  } catch (e) {
+    console.log(e);
+  }
+});
 app.use(studentRouter);
 app.use(adminRouter);
 
-app.listen(port, () => {
+io.on('connection', (socket) => {
+  console.log('New connection established');
+});
+
+server.listen(port, () => {
   console.log("Server is up on port : " + port);
 });
 

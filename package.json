@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/AjiteshMahalingam/Online-Auction-System#readme",
   "dependencies": {
+    "bad-words": "^3.0.4",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
@@ -26,12 +27,14 @@
     "express": "^4.17.1",
     "express-jwt": "^6.1.0",
     "express-session": "^1.17.2",
+    "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.12",
     "multer": "^1.4.3",
     "node-fetch": "^2.6.6",
     "nodemailer": "^6.7.0",
     "sharp": "^0.29.2",
+    "socket.io": "^4.4.0",
     "validator": "^13.7.0"
   }
 }
