@@ -108,18 +108,33 @@
                               <% }}) %>
                               <p class="card-text">Opening Bid: <%= auction.openingBid %> </p>
                               <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
+                              <% if(auction.isAccepted) { %>
                               <div class="d-flex flex-row">
                                 <div class="mr-2">
                                   <form action="/admin/acceptAuction/<%= String(auction._id) %>" method="post">
-                                    <button class="btn btn-info" type="submit" >Accept</button>
+                                    <button class="btn btn-info" type="submit" disabled>Accept</button>
                                   </form>
                                 </div>
                                 <div>
                                   <form action="/admin/rejectAuction/<%= String(auction._id) %>" method="post">
-                                    <button class="btn btn-danger" type="submit">Reject</button>
+                                    <button class="btn btn-danger" type="submit" disabled>Reject</button>
                                   </form>
                                 </div>
                               </div>
+                              <% } else { %>
+                                <div class="d-flex flex-row">
+                                  <div class="mr-2">
+                                    <form action="/admin/acceptAuction/<%= String(auction._id) %>" method="post">
+                                      <button class="btn btn-info" type="submit" >Accept</button>
+                                    </form>
+                                  </div>
+                                  <div>
+                                    <form action="/admin/rejectAuction/<%= String(auction._id) %>" method="post">
+                                      <button class="btn btn-danger" type="submit">Reject</button>
+                                    </form>
+                                  </div>
+                                </div>
+                              <% } %>
                           </div>
                       </div>
                   </div>
