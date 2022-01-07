@@ -73,11 +73,12 @@ app.get("/auction/:id", auth, async (req, res) => {
 app.use(studentRouter);
 app.use(adminRouter);
 
+server.listen(port, () => {
+  console.log("Server is up on port : " + port);
+});
+
 io.on('connection', (socket) => {
   console.log('New connection established');
 });
 
-server.listen(port, () => {
-  console.log("Server is up on port : " + port);
-});
 
