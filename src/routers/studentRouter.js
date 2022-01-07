@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 const Mongoose = require('mongoose');
+//const proxy = require('express-http-proxy');
+const request = require('request');
 
 const auth = require('../middleware/auth');
 const Student = require('../models/Student');
@@ -206,4 +208,16 @@ router.post("/student/seller/create-auction", auth, upload.single('productImg'),
         console.log(e);
     }
 });
+
+router.post("/student/enter-auction/:id", auth, (req, res) => {
+    const pUrl = "http://localhost:3500/auction?auctionId=" +  req.params.id + "&studentId=" + req.decoded._id;
+    request(pUrl).pipe(res);
+});
+
+router.post("/student/seller/start-auction/:id", auth, (req, res) => {
+    const pUrl = "http://localhost:3500/auction?username=" +  req.decoded._id + "&room=" + req.params.id;
+    //console.log(pUrl);
+    request(pUrl).pipe(res);
+});
+
 module.exports = router;

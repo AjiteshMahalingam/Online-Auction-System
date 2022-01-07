@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const cookieParser = require('cookie-parser');
-const socketio = require('socket.io');
+const proxy = require("express-http-proxy");
 
 require("./utils/connectDB");
 
@@ -16,8 +16,7 @@ const studentRouter = require("./routers/studentRouter");
 const adminRouter = require('./routers/adminRouter');
 
 const app = express();
-const server = http.createServer(app);
-const io = socketio(server);
+
 
 const port = 3000;
 
@@ -73,12 +72,10 @@ app.get("/auction/:id", auth, async (req, res) => {
 app.use(studentRouter);
 app.use(adminRouter);
 
-server.listen(port, () => {
+app.listen(port, () => {
   console.log("Server is up on port : " + port);
 });
 
-io.on('connection', (socket) => {
-  console.log('New connection established');
-});
+
 
 

@@ -16,20 +16,7 @@
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>-->
-    <div class="collapse navbar-collapse" id="navbarText">
-      <div style="position: absolute; right: 150px;">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#" style="font-size: x-large;margin:25px;">Current</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" style="font-size:x-large; margin: 25px;">Upcoming</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#" style="font-size: x-large; margin: 25px;">Sell</a>
-          </li>
-        </ul>
-      </div>
+    
       <div class="navbar-text mr-auto" style="position: absolute; right: 15px;display: block;justify-content: center;">
         <% if(isAuth) { %>
           <a class="navbar-brand" href="/student/profile" style="display: block;">
@@ -83,6 +70,19 @@
                               <% }}) %>
                               <p class="card-text">Price: <%= auction.openingBid %> </p>
                               <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
+                              <% if(auction.startTime) { %>
+                                <p>
+                                  <form method="post" action="/student/enter-auction/<%= String(auction._id) %>">
+                                    <button type="submit" class="btn btn-info">Enter Auction</button>
+                                  </form>
+                                </p>
+                              <% } else { %>
+                                <p>
+                                  <form method="post" action="">
+                                    <button type="submit" class="btn btn-info" disabled>Enter Auction</button>
+                                  </form>
+                                </p>
+                              <% } %>
                           </div>
                       </div>
                   </div>

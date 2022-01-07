@@ -116,6 +116,19 @@
                                         <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
                                         <% if(auction.isAccepted) { %>
                                             <p class="card-text">Status: Accepted </p>
+                                            <% if(auction.auctionDate.getTime() <= new Date().getTime()) { %>
+                                                <p>
+                                                    <form method="post" action="/student/seller/start-auction/<%= String(auction._id) %>">
+                                                      <button type="submit" class="btn btn-info">Start Auction</button>
+                                                    </form>
+                                                  </p>
+                                            <% } else { %> 
+                                                <p>
+                                                    <form method="post" action="">
+                                                      <button type="submit" class="btn btn-info" disabled>Start Auction</button>
+                                                    </form>
+                                                  </p>
+                                            <% } %>
                                         <% } else if(auction.isAccepted == false && auction.isCompleted == true) { %>
                                             <p class="card-text">Status: Rejected </p>
                                         <% } else { %>
@@ -189,8 +202,8 @@
             event.preventDefault();
             //console.log("Form submitted");            
             swal({
-                title: "Good job!",
-                text: "You clicked the button!",
+                title: "Auction status",
+                text: "New auction created.",
                 icon: "success",
             }).then(val => {
                 if (val) {
