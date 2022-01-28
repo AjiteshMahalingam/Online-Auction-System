@@ -47,7 +47,7 @@
       <div class="col-9">
         <% if(auctions.length > 0) { %>
           <% auctions.forEach((auction) => { %> 
-              <% if(auction.isCompleted === false) { %>
+              <% if(auction.isCompleted === false && auction.isAccepted === true) { %>
               <div class="card mb-3" style="padding: 10px;margin: 5px;">
                   <div class="row no-gutters">
                       <% products.forEach(product =>{ %>
@@ -57,7 +57,8 @@
                       </div>
                       <div class="col-md-8">
                           <div class="card-body">
-                              <h5 class="card-title">Product name: <%= product.productName %> </h5>
+                              <h5 class="card-title">Auction id: <%= auction._id %> </h5>
+                              <p class="card-text">Product name: <%= product.productName %> </p>
                               <p class="card-text">Description: <%= product.productDesc %></p>
                               <% categories.forEach(category =>{ %>
                                   <% if(String(category._id) == String(product.categoryId)){ %>
@@ -72,7 +73,7 @@
                               <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
                               <% if(auction.startTime) { %>
                                 <p>
-                                  <form method="post" action="/student/enter-auction/<%= String(auction._id) %>">
+                                  <form method="get" action="/student/enter-auction/<%= String(auction._id) %>">
                                     <button type="submit" class="btn btn-info">Enter Auction</button>
                                   </form>
                                 </p>

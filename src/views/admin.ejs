@@ -125,12 +125,12 @@
                                 <div class="d-flex flex-row">
                                   <div class="mr-2">
                                     <form action="/admin/acceptAuction/<%= String(auction._id) %>" method="post">
-                                      <button class="btn btn-info" type="submit" >Accept</button>
+                                      <button class="btn btn-info" type="submit" id="acceptBtn" >Accept</button>
                                     </form>
                                   </div>
                                   <div>
                                     <form action="/admin/rejectAuction/<%= String(auction._id) %>" method="post">
-                                      <button class="btn btn-danger" type="submit">Reject</button>
+                                      <button class="btn btn-danger" type="submit" id="rejectBtn">Reject</button>
                                     </form>
                                   </div>
                                 </div>
@@ -232,6 +232,24 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      const acceptBtn = document.querySelector('#acceptBtn');
+      acceptBtn.addEventListener("click", function (event) {           
+          swal({
+              title: "Auction status",
+              text: "Auction accepted",
+              icon: "success",
+          })
+      });
+      const rejectBtn = document.querySelector('#rejectBtn');
+      rejectBtn.addEventListener("click", function (event) {           
+          swal({
+              title: "Auction status",
+              text: "Auction rejected",
+              icon: "warning",
+          })
+      });
+  </script>
 </body>
 
 </html>

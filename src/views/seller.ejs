@@ -105,7 +105,7 @@
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">Auction id : <%= auction._id %> </h5>
-                                        <p class="card-tetx">Product name: <%= product.productName %> </p>
+                                        <p class="card-text">Product name: <%= product.productName %> </p>
                                         <p class="card-text">Description: <%= product.productDesc %></p>
                                         <% categories.forEach(category =>{ %>
                                             <% if(String(category._id) == String(product.categoryId)){ %>
@@ -118,7 +118,7 @@
                                             <p class="card-text">Status: Accepted </p>
                                             <% if(auction.auctionDate.getTime() <= new Date().getTime()) { %>
                                                 <p>
-                                                    <form method="post" action="/student/seller/start-auction/<%= String(auction._id) %>">
+                                                    <form method="get" action="/student/seller/start-auction/<%= String(auction._id) %>">
                                                       <button type="submit" class="btn btn-info">Start Auction</button>
                                                     </form>
                                                   </p>
@@ -143,25 +143,37 @@
             <div class="tab-pane fade" id="nav-complete" role="tabpanel" aria-labelledby="nav-complete-tab">
                 <% if(auctions.length > 0) { %>
                     <% var flag=0; auctions.forEach((auction) => { var i=0;%> 
-                        <% if(auction.isCompleted === true) {  %>
+                        <% if(auction.isCompleted === true) { flag=1; %>
                         <div class="card mb-3" style="padding: 10px;margin: 5px;">
                             <div class="row no-gutters">
+                                <% products.forEach(product =>{ %>
+                                    <% if(String(product._id) == String(auction.productId)){ %>
                                 <div class="col-md-4">
-                                    <img src="data:image/jpg;base64<%=  %>" class="img-fluid" alt="productImg">
+                                    <img src="data:image/png;base64,<%= product.productImg.toString('base64') %>" class="img-fluid" alt="productImg">
                                 </div>
                                 <div class="col-md-8">
                                     <div class="card-body">
                                         <h5 class="card-title">Auction id : <%= auction._id %> </h5>
-                                        <p class="card-tetx">Product name: <%= products[1].productName %> </p>
-                                        <p class="card-text">Category: <%= auction.categoryName %></p>
-                                        <p class="card-text">Description: <%= products[1].productDesc %></p>
+                                        <p class="card-text">Product name: <%= product.productName %> </p>
+                                        <% categories.forEach(category =>{ %>
+                                            <% if(String(category._id) == String(product.categoryId)){ %>
+                                        <p class="card-text">Category: <%= category.categoryName %></p>
+                                        <% }}) %>
+                                        
+                                        <p class="card-text">Description: <%= product.productDesc %></p>
                                         <p class="card-text">Price: <%= auction.openingBid %> </p>
                                         <p class="card-text">Date-Time: <%= auction.auctionDate %></p>
+                                        <p class="card-text">Final price: <%= auction.currentHighestBid %></p>
+                                        <% students.forEach(student =>{ %>
+                                        <%  if(String(student._id) == String(auction.currentHighestBidder)){ %>
+                                        <p class="card-text">Winner: <%= student.name %></p>
+                                        <%}}) %>
+                                        <% }}) %>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    <% i=i+1;} else if(flag==0){ flag=1; %>
+                    <% i=i+1;} else if(flag==0){  %>
                     <p>No records found!</p>
                 <% }}) } %>
             </div>

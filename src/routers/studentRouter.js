@@ -3,6 +3,7 @@ const multer = require('multer');
 const sharp = require('sharp');
 const Mongoose = require('mongoose');
 //const proxy = require('express-http-proxy');
+//const { createProxyMiddleware } = require('http-proxy-middleware');
 const request = require('request');
 
 const auth = require('../middleware/auth');
@@ -96,7 +97,8 @@ router.get("/student/seller/home", auth ,async (req, res) => {
                 const categories = await Category.find();
                 const auctions = await Auction.find({sellerId : req.decoded._id});
                 const products = await Product.find({sellerId : req.decoded._id});
-                res.render('seller', { categories, auctions, products });
+                const students = await Student.find();
+                res.render('seller', { categories, auctions, products, students });
             } else {
                 res.send({ "Status": "404" });
             }
@@ -209,15 +211,21 @@ router.post("/student/seller/create-auction", auth, upload.single('productImg'),
     }
 });
 
-router.post("/student/enter-auction/:id", auth, (req, res) => {
-    const pUrl = "http://localhost:3500/auction?auctionId=" +  req.params.id + "&studentId=" + req.decoded._id;
-    request(pUrl).pipe(res);
+router.get("/student/enter-auction/:id", auth, (req, res) => {
+    res.redirect("/proxy");
 });
 
-router.post("/student/seller/start-auction/:id", auth, (req, res) => {
-    const pUrl = "http://localhost:3500/auction?username=" +  req.decoded._id + "&room=" + req.params.id;
-    //console.log(pUrl);
-    request(pUrl).pipe(res);
+router.get("/student/seller/start-auction/:id", auth, async (req, res) => {
+    try {
+        const auction = await Auction.findById(req.params.id);
+        auction.startTime = new Date();
+        await auction.save();
+        console.log("Starting auction");
+        console.log(auction);
+        res.redirect("/proxy");
+    } catch(e) {
+        console.log(e);
+    }
 });
 
 module.exports = router;

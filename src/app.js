@@ -3,6 +3,9 @@ const path = require('path');
 const http = require('http');
 const cookieParser = require('cookie-parser');
 const proxy = require("express-http-proxy");
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const url = require('url');
+const Mongoose = require('mongoose');
 
 require("./utils/connectDB");
 
@@ -56,22 +59,64 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-app.get("/auction/:id", auth, async (req, res) => {
+// app.get("/auction/:id", auth, async (req, res) => {
+//   try {
+//     const auction = await Auction.findById(req.params.id);
+//     //console.log(auction);
+//     const product = await Product.findById(auction.productId);
+//     //console.log(product);
+//     const seller = await Student.findById(auction.sellerId);
+//     //console.log(seller);
+//     res.render('auction', {auctionId : req.params.id, title: product.productName, sellerName : seller.name, openingBid: auction.openingBid, image : product.productImg});
+//   } catch (e) {
+//     console.log(e);
+//   }
+// });
+app.use(studentRouter);
+app.use(adminRouter);
+
+// app.use("/proxy", createProxyMiddleware({
+//   target: "http://localhost:3500/",
+//   changeOrigin: true
+// }));
+
+app.get('/proxy', (req, res) => {
+  res.writeHead(301, {"Location" : "http://localhost:3500/"});
+  res.end();
+});
+
+app.post("/api/getAuctionDetails", async (req, res) => {
   try {
-    const auction = await Auction.findById(req.params.id);
-    //console.log(auction);
+    const queryParams = url.parse(req.url, true).query;
+    const auction = await Auction.findById(queryParams.auctionId);
     const product = await Product.findById(auction.productId);
-    //console.log(product);
     const seller = await Student.findById(auction.sellerId);
-    //console.log(seller);
-    res.render('auction', {auctionId : req.params.id, title: product.productName, sellerName : seller.name, openingBid: auction.openingBid, image : product.productImg});
+    const data = {auctionId : queryParams.auctionId, productName : product.productName, sellerName : seller.name, openingBid: auction.openingBid};
+    //console.log(data);
+    res.send(data);
   } catch (e) {
     console.log(e);
   }
 });
-app.use(studentRouter);
-app.use(adminRouter);
 
+app.post("/api/exitAuction", async (req, res) => {
+  try {
+    const queryParams = url.parse(req.url, true).query;
+    const auction = await Auction.findById(queryParams.auctionId);
+    //console.log(queryParams);
+    auction.endTime = new Date();
+    auction.currentHighestBid = Number(queryParams.lastBid);
+    const highestBidder = await Student.find({ regNo : Number(queryParams.lastBidder)});
+    auction.currentHighestBidder = Mongoose.Types.ObjectId(highestBidder._id);
+    auction.isCompleted = true;
+    await auction.save();
+    console.log("Closing auction : ");
+    console.log(auction);
+    res.end();
+  } catch(e) {
+    console.log(e);
+  }
+});
 app.listen(port, () => {
   console.log("Server is up on port : " + port);
 });
