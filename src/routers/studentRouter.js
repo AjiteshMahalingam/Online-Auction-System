@@ -2,8 +2,6 @@ const express = require('express');
 const multer = require('multer');
 const sharp = require('sharp');
 const Mongoose = require('mongoose');
-//const proxy = require('express-http-proxy');
-//const { createProxyMiddleware } = require('http-proxy-middleware');
 const request = require('request');
 
 const auth = require('../middleware/auth');
@@ -90,13 +88,13 @@ router.get("/student/profile", auth, async (req, res) => {
     }
 });
 
-router.get("/student/seller/home", auth ,async (req, res) => {
+router.get("/student/seller/home", auth, async (req, res) => {
     try {
         if (req.isAuth) {
             if (req.decoded.type === 'student') {
                 const categories = await Category.find();
-                const auctions = await Auction.find({sellerId : req.decoded._id});
-                const products = await Product.find({sellerId : req.decoded._id});
+                const auctions = await Auction.find({ sellerId: req.decoded._id });
+                const products = await Product.find({ sellerId: req.decoded._id });
                 const students = await Student.find();
                 res.render('seller', { categories, auctions, products, students });
             } else {
@@ -110,7 +108,7 @@ router.get("/student/seller/home", auth ,async (req, res) => {
     }
 });
 
-router.get("/browse", auth ,async (req, res) => {
+router.get("/browse", auth, async (req, res) => {
     try {
         if (req.isAuth) {
             if (req.decoded.type === 'student') {
@@ -118,7 +116,7 @@ router.get("/browse", auth ,async (req, res) => {
                 const auctions = await Auction.find();
                 const students = await Student.find();
                 const products = await Product.find();
-                res.render('browse', { categories, auctions, products, students, isAuth : req.isAuth });
+                res.render('browse', { categories, auctions, products, students, isAuth: req.isAuth });
             } else {
                 res.send({ "Status": "404" });
             }
@@ -130,23 +128,23 @@ router.get("/browse", auth ,async (req, res) => {
     }
 });
 
-router.get("/browse/:category", auth ,async (req, res) => {
+router.get("/browse/:category", auth, async (req, res) => {
     try {
         if (req.isAuth) {
             if (req.decoded.type === 'student') {
                 const categories = await Category.find();
                 var filterCategory;
                 categories.forEach(category => {
-                    if(category.categoryName == req.params.category)
+                    if (category.categoryName == req.params.category)
                         filterCategory = category._id;
                 });
-                const products = await Product.find({categoryId : filterCategory});
+                const products = await Product.find({ categoryId: filterCategory });
 
                 const auctions = await Auction.find();
                 var filterAuctions = [];
                 auctions.forEach(auction => {
                     products.forEach(product => {
-                        if(auction.productId.toString() == product._id.toString())
+                        if (auction.productId.toString() == product._id.toString())
                             filterAuctions.push(auction);
                     });
                 });
@@ -154,11 +152,11 @@ router.get("/browse/:category", auth ,async (req, res) => {
                 var filterStudents = [];
                 filterAuctions.forEach(auction => {
                     students.forEach(student => {
-                        if(auction.sellerId.toString() == student._id.toString())
+                        if (auction.sellerId.toString() == student._id.toString())
                             filterStudents.push(student);
                     });
                 });
-                res.render('browse', { categories, auctions : filterAuctions, products, students : filterStudents, isAuth : req.isAuth });
+                res.render('browse', { categories, auctions: filterAuctions, products, students: filterStudents, isAuth: req.isAuth });
             } else {
                 res.send({ "Status": "404" });
             }
@@ -223,7 +221,7 @@ router.get("/student/seller/start-auction/:id", auth, async (req, res) => {
         console.log("Starting auction");
         console.log(auction);
         res.redirect("/proxy");
-    } catch(e) {
+    } catch (e) {
         console.log(e);
     }
 });

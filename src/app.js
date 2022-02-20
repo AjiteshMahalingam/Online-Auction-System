@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const http = require('http');
 const cookieParser = require('cookie-parser');
-const proxy = require("express-http-proxy");
-const { createProxyMiddleware } = require('http-proxy-middleware');
 const url = require('url');
 const Mongoose = require('mongoose');
 
@@ -81,7 +79,7 @@ app.use(adminRouter);
 // }));
 
 app.get('/proxy', (req, res) => {
-  res.writeHead(301, {"Location" : "http://localhost:3500/"});
+  res.writeHead(301, { "Location": "http://localhost:3500/" });
   res.end();
 });
 
@@ -91,7 +89,7 @@ app.post("/api/getAuctionDetails", async (req, res) => {
     const auction = await Auction.findById(queryParams.auctionId);
     const product = await Product.findById(auction.productId);
     const seller = await Student.findById(auction.sellerId);
-    const data = {auctionId : queryParams.auctionId, productName : product.productName, sellerName : seller.name, openingBid: auction.openingBid};
+    const data = { auctionId: queryParams.auctionId, productName: product.productName, sellerName: seller.name, openingBid: auction.openingBid };
     //console.log(data);
     res.send(data);
   } catch (e) {
@@ -106,14 +104,14 @@ app.post("/api/exitAuction", async (req, res) => {
     //console.log(queryParams);
     auction.endTime = new Date();
     auction.currentHighestBid = Number(queryParams.lastBid);
-    const highestBidder = await Student.find({ regNo : Number(queryParams.lastBidder)});
+    const highestBidder = await Student.find({ regNo: Number(queryParams.lastBidder) });
     auction.currentHighestBidder = Mongoose.Types.ObjectId(highestBidder._id);
     auction.isCompleted = true;
     await auction.save();
     console.log("Closing auction : ");
     console.log(auction);
     res.end();
-  } catch(e) {
+  } catch (e) {
     console.log(e);
   }
 });
